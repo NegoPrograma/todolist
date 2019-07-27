@@ -1,0 +1,25 @@
+<%- include("header") -%>
+
+<div class="box" id="heading">
+          <h1><%= listTitle %></h1>
+    </div>
+
+    <div class="box">
+        <% newTask.forEach((task)=>{ %>
+        <form action="/delete" class="item" method="POST">
+            <div class="item">
+                <input type="checkbox" name="listTitle" value="<%= listTitle %>" required>
+            <p><%= task.name %> </p>
+            <button name="task" value="<%= task._id %>"  type="submit"></button>
+        </div>
+        </form>
+            <%})%>
+    
+            <form action="/" class="item" method="POST">
+                <input placeholder="Tarefa nova? bota aqui!" type="text" name="newTask" id="input" autocomplete="off">
+                <button type="submit" name="listTitle" value="<%= listTitle %>">+</button>
+                </form>
+        </div>
+
+<%- include("footer") -%>
+        
