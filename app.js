@@ -176,10 +176,10 @@ app.get("/conf",(req,res)=>{
 
 
 app.post("/conf",(req,res)=>{
-  console.log("SACA SÓ O QUE TEM NO VETOR KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK:\N\N\N\N\N\N\N " + req.body.newTask);
+  console.log("SACA SÓ O QUE TEM NO VETOR KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK:\n\n\n\n\n\n\n " + req.body.newTask);
   
 
-  List.findOne({name: "confessionario"},(error,results)=>{
+  List.findOne({name: req.body.conf },(error,results)=>{
     results.items.push(req.body.newTask);
     results.save();
   });
