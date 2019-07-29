@@ -5,11 +5,13 @@
     </div>
 
     <div class="box">
-        <% newTask.forEach((task)=>{ %>
-        <div>
-            <p><%= task.name %> </p>
-        </div>
-            <%})%>
+        <% if(newTask.length > 0){ %>
+            <% newTask.forEach((task)=>{ %>
+            <div>
+                <p><%= task.name %> </p>
+            </div>
+                <%})%>
+        <%}%>
     
             <form action="/conf" class="item" method="POST">
                 <input placeholder="Tarefa nova? bota aqui!" type="text" name="newTask" id="input" autocomplete="off">

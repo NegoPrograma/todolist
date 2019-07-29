@@ -155,10 +155,17 @@ app.post("/delete",(req,res)=>{
 app.get("/conf",(req,res)=>{
 
   List.find({name: "confessionario"},(error,results)=>{
-    
-    res.render("conf", {newTask: results.items});
-  });
+    if(!results){
+      const actualList = new List({
+        name: "confessionario",
+        items: []
+      });
+    actualList.save();
+    res.render("conf", {newTask: actualList.items});
 
+  }else{
+    res.render("conf", {newTask: results.items});
+  }
 });
 
 
