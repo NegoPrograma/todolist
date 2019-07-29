@@ -155,7 +155,6 @@ app.post("/delete",(req,res)=>{
 app.get("/conf",(req,res)=>{
 
   List.findOne({name: "confessionario"},(error,results)=>{
-    console.log(results.items)
     if(!error)
       if(!results){
           const actualList = new List({
@@ -168,6 +167,8 @@ app.get("/conf",(req,res)=>{
       else{
        res.render("conf", {newTask: results.items});
       }
+      console.log(results.items)
+
     console.log(error);
           
   });
@@ -177,11 +178,18 @@ app.get("/conf",(req,res)=>{
 
 app.post("/conf",(req,res)=>{
   console.log("SACA SÓ O QUE TEM NO VETOR KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK:\n\n\n\n\n\n\n " + req.body.newTask);
+  console.log(req.body.conf);
   
 
   List.findOne({name: req.body.conf },(error,results)=>{
-    results.items.push(req.body.newTask);
-    results.save();
+    if(!error){
+      results.items.push(req.body.newTask);
+      results.save();
+    }
+    else{
+      console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ERRO: " + error);
+      
+    }
   });
   setTimeout(()=>{res.redirect("/conf")},1800);
 });
