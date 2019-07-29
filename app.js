@@ -3,12 +3,12 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
-
+app.use(express.static("assets"));
 
 //começando o BD
 const db = require("mongoose")
 
-db.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true});
+db.connect("mongodb+srv://admin-isaac:admin@cluster0-vyins.mongodb.net/todolistDB",{useNewUrlParser: true});
 
 
 const tdlSchema = {
@@ -23,32 +23,32 @@ const Item = db.model("Item",tdlSchema);
 //setando itens iniciais para teste
 
 
-const task = new Item({
-  name: "Limpar o banheiro"
-});
-
-
-const task2 = new Item({
-  name: "Fazer pastel"
-});
-
-
-const task3 = new Item({
-  name: "Estudar DB"
-});
-
-
-const defaultItems = [task,task2,task3];
-
-// Item.insertMany(defaultItems,(error)=>{
-//   if(error){
-//     console.log(error);
-//   }
-//   else{
-//     console.log("Default itens added!");
-    
-//   }
+// const task = new Item({
+//   name: "Limpar o banheiro"
 // });
+
+
+// const task2 = new Item({
+//   name: "Fazer pastel"
+// });
+
+
+// const task3 = new Item({
+//   name: "Estudar DB"
+// });
+
+
+// const defaultItems = [task,task2,task3];
+
+// // Item.insertMany(defaultItems,(error)=>{
+// //   if(error){
+// //     console.log(error);
+// //   }
+// //   else{
+// //     console.log("Default itens added!");
+    
+// //   }
+// // });
 
 
 
@@ -66,7 +66,7 @@ Tirar a necessidade de criar um arquivo HTML pra cada situação que poderia ser
 não é muito diferente do erbhtml.
 
 */
-app.use(express.static("assets"));
+
 
 // infelizmente precisamos criar uma variavel global pra requisição, mas isso é só pq ainda não mexemos com BD
 // let workTask = [];
@@ -82,9 +82,7 @@ const listSchema = {
 const List = db.model("List",listSchema);
 
 
-app.get("/:listname", function(req, res){ 
-
-
+app.get("/lists/:listname", function(req, res){ 
 
   List.findOne({name:req.params.listname.toLowerCase()},(err,results)=>{
     if(!results){
@@ -93,10 +91,10 @@ app.get("/:listname", function(req, res){
           items: []
         });
       actualList.save();
-      res.render("list", {listTitle: actualList.name,newTask: actualList.items,route: "/" + actualList.name});
+      res.render("list", {listTitle: actualList.name,newTask: actualList.items});
 
     }else{
-      res.render("list", {listTitle: results.name,newTask: results.items,route: "/" + results.name});
+      res.render("list", {listTitle: results.name,newTask: results.items});
     }
 
   });
@@ -113,7 +111,7 @@ app.get("/:listname", function(req, res){
 //aprendendo o conceito de templating, que é basicamente a arte de reutilizar...templates!
 //mas só amanhã, vai dormir mlk.
 
-app.post("/",(req,res)=>{
+app.post("/lists/:listname",(req,res)=>{
 
   console.log(req.body.listTitle);
   
@@ -124,8 +122,10 @@ app.post("/",(req,res)=>{
     result.items.push(newItem);
     result.save();
   });
+setTimeout(()=>{
+  res.redirect("/lists/"+req.body.listTitle);
 
-  res.redirect("/" + req.body.listTitle);
+},2000)
 });
 
 //testando layout
@@ -138,13 +138,10 @@ app.get("/about",(req,res)=>{
 app.post("/delete",(req,res)=>{
   console.log(req.body.listTitle);
   console.log(req.body.task);
-  
-  
-  
-   List.findOneAndUpdate({name:req.body.listTitle},{$pull:{items:{_id:req.body.task }}},(err,result)=>{
+   List.findOneAndUpdate({name:req.body.listTitle},{$pull:{items:{_id:req.body.task}}},(err,result)=>{
 
    });
-   res.redirect("/" + req.body.listTitle);
+   res.redirect("/lists/" + req.body.listTitle);
 
 });
 
