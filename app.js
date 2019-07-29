@@ -151,10 +151,7 @@ app.post("/delete",(req,res)=>{
 
 //seção especial do conf
 
-
-let conf = new List({name:"confessionario",items:[]});
-conf.save();
-
+//list do conf já feita e deletada pra n ficar salvando
 app.get("/conf",(req,res)=>{
 
   List.find({name: "confessionario"},(error,results)=>{
