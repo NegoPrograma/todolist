@@ -167,8 +167,6 @@ app.get("/conf",(req,res)=>{
       else{
        res.render("conf", {newTask: results.items});
       }
-      console.log(results.items)
-
     console.log(error);
           
   });
@@ -177,13 +175,16 @@ app.get("/conf",(req,res)=>{
 
 
 app.post("/conf",(req,res)=>{
-  console.log("SACA SÓ O QUE TEM NO VETOR KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK:\n\n\n\n\n\n\n " + req.body.newTask);
-  console.log(req.body.conf);
-  
+  console.log("SACA SÓ O QUE TEM NO VETOR KKKKKKKKK: " + req.body.newTask);
+  console.log("valor do botão de submit: " +req.body.conf);
 
+   
+  const newItem = new Item({
+    name:req.body.newTask
+  });
   List.findOne({name: req.body.conf },(error,results)=>{
     if(!error){
-      results.items.push(req.body.newTask);
+      results.items.push(newItem);
       results.save();
     }
     else{
@@ -195,8 +196,9 @@ app.post("/conf",(req,res)=>{
 });
 
 
-app.get("dropconfdb",(req,res)=>{
+app.get("/dropconfdb",(req,res)=>{
   List.deleteOne({name: "confessionario"});
+  res.redirect("/conf");
 });
 
 //fim da secção especial do conf
