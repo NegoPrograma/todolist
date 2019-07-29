@@ -154,7 +154,9 @@ app.post("/delete",(req,res)=>{
 //list do conf já feita e deletada pra n ficar salvando
 app.get("/conf",(req,res)=>{
 
-  List.find({name: "confessionario"},(error,results)=>{
+  List.findOne({name: "confessionario"},(error,results)=>{
+    console.log(results.items)
+    if(!error)
       if(!results){
           const actualList = new List({
             name: "confessionario",
@@ -166,6 +168,8 @@ app.get("/conf",(req,res)=>{
       else{
        res.render("conf", {newTask: results.items});
       }
+    console.log(error);
+          
   });
 });
 
