@@ -177,7 +177,7 @@ app.get("/conf",(req,res)=>{
 
 app.post("/conf",(req,res)=>{
 
-  List.find({name: "confessionario"},(error,results)=>{
+  List.findOne({name: "confessionario"},(error,results)=>{
     results.items.push(req.body.newTask);
     results.save();
   });
