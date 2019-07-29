@@ -1,0 +1,21 @@
+<%- include("header") -%>
+
+<div class="box" id="heading">
+          <h1>Confessionário</h1>
+    </div>
+
+    <div class="box">
+        <% newTask.forEach((task)=>{ %>
+            <p><%= task.name %> </p>
+        </div>
+        </form>
+            <%})%>
+    
+            <form action="/conf" class="item" method="POST">
+                <input placeholder="Tarefa nova? bota aqui!" type="text" name="newTask" id="input" autocomplete="off">
+                <button type="submit" name="listTitle">+</button>
+                </form>
+        </div>
+
+<%- include("footer") -%>
+        

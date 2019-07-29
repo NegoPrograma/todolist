@@ -83,8 +83,9 @@ const List = db.model("List",listSchema);
 
 
 app.get("/lists/:listname", function(req, res){ 
+  let title = req.params.listname.toLowerCase();
 
-  List.findOne({name:req.params.listname.toLowerCase()},(err,results)=>{
+  List.findOne({name:title},(err,results)=>{
     if(!results){
         const actualList = new List({
           name: req.params.listname,
@@ -144,6 +145,43 @@ app.post("/delete",(req,res)=>{
    res.redirect("/lists/" + req.body.listTitle);
 
 });
+
+
+
+
+//seção especial do conf
+
+
+let conf = new List({name:"confessionario",items:[]});
+conf.save();
+
+app.get("/conf",(req,res)=>{
+
+  List.find({name: "confessionario"},(error,results)=>{
+    
+    res.render("conf", {newTask: results.items});
+  });
+
+});
+
+
+
+app.post("/conf",(req,res)=>{
+
+  List.find({name: "confessionario"},(error,results)=>{
+    results.items.push(req.body.newTask);
+    results.save();
+  });
+  setTimeout(()=>{res.redirect("/conf")},1800);
+});
+
+
+app.get("dropconfdb",(req,res)=>{
+  List.deleteOne({name: "confessionario"});
+});
+
+//fim da secção especial do conf
+
 
 app.listen(process.env.PORT || 3000,()=>{
   console.log("server started! port: 3000");
