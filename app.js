@@ -40,15 +40,15 @@ const Item = db.model("Item",tdlSchema);
 
 // const defaultItems = [task,task2,task3];
 
-// // Item.insertMany(defaultItems,(error)=>{
-// //   if(error){
-// //     console.log(error);
-// //   }
-// //   else{
-// //     console.log("Default itens added!");
+// Item.insertMany(defaultItems,(error)=>{
+//   if(error){
+//     console.log(error);
+//   }
+//   else{
+//     console.log("Default itens added!");
     
-// //   }
-// // });
+//   }
+// });
 
 
 
@@ -82,31 +82,33 @@ const listSchema = {
 const List = db.model("List",listSchema);
 
 
+app.get("/",(req,res)=>{
+  res.redirect("/lists/tutorial");
+});
+
+
+
+
 app.get("/lists/:listname", function(req, res){ 
   let title = req.params.listname.toLowerCase();
-
   List.findOne({name:title},(err,results)=>{
-    if(!results){
-        const actualList = new List({
-          name: req.params.listname,
-          items: []
-        });
-      actualList.save();
-      res.render("list", {listTitle: actualList.name,newTask: actualList.items});
+      if(!results){
+          const actualList = new List({
+            name: req.params.listname,
+            items: []
+          });
+        actualList.save();
+        res.render("list", {listTitle: actualList.name,newTask: actualList.items});
 
-    }else{
-      res.render("list", {listTitle: results.name,newTask: results.items});
-    }
-
+      }else{
+        if(results.name == "tutorial"){
+          res.render("tutorial",{newTask: results.items});
+        }
+        else{
+        res.render("list", {listTitle: results.name,newTask: results.items});
+      }
+    };
   });
-  
- 
-
-  // FUNÇÃO NOVA, BRO! res.render("arquivo ejs que está, exclusivamente, na pasta views", JSON com suas chaves e valores)
-  // Item.find({},(error,items)=>{
-  //   res.render("list", {listTitle: actualList.name,newTask: actualList.items,route: "/"});
-  // });
-  
 });
 
 //aprendendo o conceito de templating, que é basicamente a arte de reutilizar...templates!
